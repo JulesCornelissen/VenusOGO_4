@@ -2,6 +2,11 @@
 Venus OGO group 4
 Arduino code for 2017 year robots to "explore Venus".
 
+#Library
+Library for IR receiving is included and modified for the Arduino Pro Micro. Extract the zip in to the Arduino\libraries installation folder.
+The library used can be found here in case you need the unmodified version: https://github.com/cyborg5/IRLib2
+Documentation on the library is available in the documentationi folder under "using-an-infrared-library.pdf"
+
 #Documention
 Create a seperate file for every seperate part of documentation.
 
