@@ -18,9 +18,28 @@ void setup() {
   Serial.begin(9600);
   delay(2000); while (!Serial); //delay for Leonardo
   Serial.println(F("Every time you press a key is a serial monitor we will send."));
+//  digitalWrite(2,LOW);
+  digitalWrite(3,HIGH);
+//  digitalWrite(4,HIGH);
+//  digitalWrite(6,HIGH);
 }
 
 void loop() {
+//  if (Serial.read() == '2') {
+//    digitalWrite(2,HIGH);
+//    Serial.println("2 HIGH");
+//  }
+//    if (Serial.read() == '3') {
+//    digitalWrite(3,HIGH);
+//  }
+//    if (Serial.read() == '4') {
+//    digitalWrite(4,HIGH);
+//  }
+//    if (Serial.read() == '6') {
+//    digitalWrite(6,HIGH);
+//  }
+
+  
   if (Serial.read() != -1) {
     //send a code every time a character is received from the 
     // serial port. You could modify this sketch to send when you
