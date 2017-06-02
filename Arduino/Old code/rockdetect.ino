@@ -12,7 +12,7 @@
 #define RIGHT_ENCODER 8
 
 #define ULTRA_PIN 9
-#define sensor_FRONT A3 // Sharp IR GP2Y0A41SK0F (4-30cm, analog)
+#define sensor_FRONT 0 // Sharp IR GP2Y0A41SK0F (4-30cm, analog)
 #define sensor_LEFT A4
 #define sensor_RIGHT A5
 
