@@ -18,10 +18,12 @@ void setup() {
   Serial.begin(9600);
   delay(2000); while (!Serial); //delay for Leonardo
   Serial.println(F("Every time you press a key is a serial monitor we will send."));
-//  digitalWrite(2,LOW);
-  digitalWrite(3,HIGH);
-//  digitalWrite(4,HIGH);
-//  digitalWrite(6,HIGH);
+  // Define which pins should output
+  digitalWrite(2,LOW);
+  digitalWrite(3,LOW);
+  digitalWrite(4,LOW);
+  pinMode(9,OUTPUT);
+  digitalWrite(9,HIGH);
 }
 
 void loop() {

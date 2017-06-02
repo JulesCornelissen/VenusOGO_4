@@ -1,0 +1,7 @@
+Beacon IR send is defined in the file "IRsendRawDemo" under arduino\beacon.
+It works by using a quad channel and-gate with each of the and-gates hooked up to the timer on the Arduino. Then using digitalWrite to set the output of a digital pin that is hooked up to the other lead of the and-gate.
+This way it is possible to cycle which output and thus which LED should be lit by the timer circuit.
+
+For schematic see: BeaconSendSchematic.jpg
+
+In the next iteration of the circuit multiple LED's will be hooked up to one output, powered using a MOSFET because the Arduino will not be powerful enough to power that many LED's at once.
