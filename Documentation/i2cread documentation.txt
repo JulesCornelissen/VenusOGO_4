@@ -1,0 +1,51 @@
+The function I2CRead is called when the slave Arduino (the Uno on the robot) receives data from the Arduino Micro. Many options were considered for implementing this function. The first idea was to always send entire doubles over serial but this would take quite a bit of time to sent over each and everytime. So we sought further to optimize the amount of data that would be sent with eacht data packet. In the end we settled upon sending over a integer with a dynamic length. The first digit of the integer indicates which to which sensor the data pertains like so:
+
+0: Left Sharp distance sensor
+1: Center Sharp distance sensor
+2: Right Sharp distance sensor
+3: Left CNY70 sensor
+4: Center CNY70 sensor
+5: Right CNY70 sensor
+6: Left Beacon sensor
+7: Center Beacon sensor
+8: Right Beacon sensor
+9: Reserved (unused)
+
+It was then possible to optimize the data sent for each sensor seperately since we can now send per character from the master (Micro) to the slave (Uno). For the Sharp distance sensors we want to send over the distance it measures, this is measured with sub centimeter precision so the decision was made to send over the data in millimeters. It can measure up to 40cm away so in this case three characters plus the flag is required. That means that it only requires four bytes to be sent over which is really quick.
+
+For the CNY70 sensors the only data required is a boolean. Since the Arduino handles booleans internally as unsigned 8 bit integers the data transfer could be optimized by only sending over one character containing the boolean value and the flag. That means that only two characters are required in case of sending over the CNY70 sensor data.
+
+Finally for the beacon sensors, these can detect up to four beacons maximum at any given time. The absence of a value means it wouldn't detect that beacon so the value that has to be sent over is only the absolute value of which beacons quadrants it can detect. This can be encoded by numbering quadrants one through four 1/2/4/8 respectively. It's then possible to additively determine a unique encoding for which beacons it detects, which results in a table like follows:
+
+1 = Quadrant: 1
+2 = Quadrant: 2
+3 = Quadrant: 2+1
+4 = Quadrant: 3
+5 = Quadrant: 3+1
+6 = Quadrant: 3+2
+7 = Quadrant: 3+2+1
+8 = Quadrant: 4
+9 = Quadrant: 4+1
+10 = Quadrant: 4+2
+11 = Quadrant: 4+2+1
+12 = Quadrant: 4+3
+13 = Quadrant: 4+3+1
+14 = Quadrant: 4+3+2
+15 = Quadrant: 4+3+2+1
+
+This means that in the end only two characters plus the flag character, so three characters in total are required to send over the beacon data.
+
+Using this encoding it was then possible to implement this progamatically in to a function using a loop, switch case, some character to integer conversions and variable assignments. Since these values can be stored globally the next time the robot will go through it's routine after receiving new data it will read the global variable and act based upon the new value. For more specifics on the working of the code refer to the comments that are included in the code, available in appendix <insert number>
+
+
+Sources:
+http://www.instructables.com/id/I2C-between-Arduinos/
+https://www.arduino.cc/en/Reference/Wire
+https://arduino.stackexchange.com/questions/16292/sending-and-receiving-different-types-of-data-via-i2c-in-arduino
+https://stackoverflow.com/questions/25790633/how-to-convert-char-to-int-in-arduino
+https://forum.arduino.cc/index.php?topic=44151.0
+https://forum.arduino.cc/index.php?topic=45445.0
+https://forum.arduino.cc/index.php?topic=48477.0
+https://forum.arduino.cc/index.php?topic=57138.0
+
+
