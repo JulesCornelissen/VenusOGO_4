@@ -1,4 +1,4 @@
-The function I2CRead is called when the slave Arduino (the Uno on the robot) receives data from the Arduino Micro. Many options were considered for implementing this function. The first idea was to always send entire doubles over serial but this would take quite a bit of time to sent over each and everytime. So we sought further to optimize the amount of data that would be sent with eacht data packet. In the end we settled upon sending over a integer with a dynamic length. The first digit of the integer indicates which to which sensor the data pertains like so:
+The function I2CRead is called when the slave Arduino (the Uno on the robot) receives data from the Arduino Micro. Many options were considered for implementing this function. The first idea was to always send entire doubles over serial but this would take quite a bit of time to sent over each and everytime. So we sought further to optimize the amount of data that would be sent with eacht data packet. In the end we settled upon sending over a integer with a dynamic length. However, when sending over an integer over I2C the Arduino automatically tries to conver this to a string upon receiving. In order to counteract this we first convert the integer to a string before sending it over so that we receive exactly the data as we send it. Upon receiving this also proves useful because it's then easy to seperate the first digit from the rest of the digits. This is useful because we use the first digit to encode what type of data is being sent over. The encoding for which type of data is being sent over is like follows: 
 
 0: Left Sharp distance sensor
 1: Center Sharp distance sensor
@@ -17,6 +17,7 @@ For the CNY70 sensors the only data required is a boolean. Since the Arduino han
 
 Finally for the beacon sensors, these can detect up to four beacons maximum at any given time. The absence of a value means it wouldn't detect that beacon so the value that has to be sent over is only the absolute value of which beacons quadrants it can detect. This can be encoded by numbering quadrants one through four 1/2/4/8 respectively. It's then possible to additively determine a unique encoding for which beacons it detects, which results in a table like follows:
 
+0 = No quadrant detected
 1 = Quadrant: 1
 2 = Quadrant: 2
 3 = Quadrant: 2+1

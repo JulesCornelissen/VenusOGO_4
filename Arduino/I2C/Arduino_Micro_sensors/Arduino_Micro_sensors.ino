@@ -28,7 +28,6 @@ bool LD_condition(int pin){
 void setup(){
   // Start the I2C Bus as Master
   Wire.begin(); 
-  
   Serial.begin(9600);
   delay(2000); while (!Serial); //delay for Leonardo
   recvOne.enableIRIn(); // Start the receiver;//
@@ -56,59 +55,43 @@ int distance_right(){
     return (13*pow(voltage, -1));
 }
 
- int sharp_left = distance_left();
- int sharp_right = distance_right();
- int sharp_front = distance_front();
+int sharp_left = distance_left();
+int sharp_right = distance_right();
+int sharp_front = distance_front();
 
-// void sendBoolean(bool condition){
-// Wire.beginTransmission(9);
-//   Wire.write(condition);
-//   Wire.endTransmission();
-
-
-void sendData(int data){
-   Wire.beginTransmission(5); // transmit to device #9
+void sendData(char data[]){
+   Wire.beginTransmission(5); // transmit to device #5
    Wire.write(data); // sends data 
    Wire.endTransmission();    // stop transmitting
-  
+   Serial.println(data);
+   Serial.println("Sent data!");
 }
 
 void loop() {
   if (digitalRead(4) == LOW){
-    int CNY_left = 30;
+    char CNY_left[] = "30";
     sendData(CNY_left); 
   }
   else if (digitalRead(4) == HIGH){
-    int CNY_left = 31;
+    char CNY_left[] = "31";
     sendData(CNY_left);
   }
-
-  
-
-  if (digitalRead(5) == LOW){
-    int CNY_right = 30;
-    sendData(CNY_right); 
-  }
-  else if (digitalRead(5) == HIGH){
-    int CNY_right = 31;
-    sendData(CNY_right);
-  }
-
-
-
   if (digitalRead(6) == LOW){
-    int CNY_center = 30;
+    char CNY_center[] = "40";
     sendData(CNY_center); 
   }
   else if (digitalRead(6) == HIGH){
-    int CNY_center = 31;
+    char CNY_center[] = "41";
     sendData(CNY_center);
+  }  
+  if (digitalRead(5) == LOW){
+    char CNY_right[] = "50";
+    sendData(CNY_right); 
   }
-  
-  
- 
- 
-  
-  delay(500);
+  else if (digitalRead(5) == HIGH){
+    char CNY_right[] = "51";
+    sendData(CNY_right);
+  }
+  //delay(500);
 }
 
