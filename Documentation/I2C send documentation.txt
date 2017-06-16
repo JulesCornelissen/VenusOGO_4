@@ -1,0 +1,1 @@
+For sending data over from the master Arduino (Micro) to the slave Arduino (Uno) we use I2C communication. We wrote a function called sendData on the Micro which can take any string and send it over to the Uno via I2C.
