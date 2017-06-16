@@ -56,26 +56,58 @@ int distance_right(){
     return (13*pow(voltage, -1));
 }
 
+ int sharp_left = distance_left();
+ int sharp_right = distance_right();
+ int sharp_front = distance_front();
 
-void sendData(int distance){
-   Wire.beginTransmission(9); // transmit to device #9
-   Wire.write(distance); // sends data 
+// void sendBoolean(bool condition){
+// Wire.beginTransmission(9);
+//   Wire.write(condition);
+//   Wire.endTransmission();
+
+
+void sendData(int data){
+   Wire.beginTransmission(5); // transmit to device #9
+   Wire.write(data); // sends data 
    Wire.endTransmission();    // stop transmitting
   
 }
 
-
-void sendAllData(){
- int sharp_left = distance_left();
- int sharp_right = distance_right();
- int sharp_front = distance_front();
-  sendData(sharp_left);
-  sendData(sharp_right);
-  sendData(sharp_front);
-}
-
 void loop() {
-  sendAllData();
+  if (digitalRead(4) == LOW){
+    int CNY_left = 30;
+    sendData(CNY_left); 
+  }
+  else if (digitalRead(4) == HIGH){
+    int CNY_left = 31;
+    sendData(CNY_left);
+  }
+
+  
+
+  if (digitalRead(5) == LOW){
+    int CNY_right = 30;
+    sendData(CNY_right); 
+  }
+  else if (digitalRead(5) == HIGH){
+    int CNY_right = 31;
+    sendData(CNY_right);
+  }
+
+
+
+  if (digitalRead(6) == LOW){
+    int CNY_center = 30;
+    sendData(CNY_center); 
+  }
+  else if (digitalRead(6) == HIGH){
+    int CNY_center = 31;
+    sendData(CNY_center);
+  }
+  
+  
+ 
+ 
   
   delay(500);
 }
