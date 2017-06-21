@@ -2,9 +2,9 @@
 
 int deviceNumber = 5; //Fill in the number that's set on the micro (device address)
 
-int leftDistance = 0;
+boolean leftDistance = 0;
 int centerDistance = 0;
-int rightDistance = 0;
+boolean rightDistance = 0;
 
 boolean leftCNY = true;
 boolean centerCNY = true;
@@ -37,19 +37,39 @@ void I2CRead(int numBytes) {
   }
   
   switch (switchInt){
-    case 0:    //receive left Sharp distance sensor -- distance in mm
-    leftDistance = atoi(&recv[1]);
+    case 1:    //receive left Sharp distance sensor -- distance in mm
+    if (recv[i-1] == '1'){ //check the last digit of the data received, 1 means boolean should be true and 0 means the boolean should be false
+      leftDistance = true; // True means that the sensor detects a rock in front of the robot
+    }
+    else if (recv[i-1] == '0'){ //Make sure to check if the digit is actually zero instead of a different random value in case of wrong communication
+      leftDistance = false; // False means that the sensor does not detect a rock
+    }
     break;
     
-    case 1:   //receive center Sharp distance sensor -- distance in mm
-    centerDistance = atoi(&recv[1]);
+    case 2:   //receive center Sharp distance sensor
+      switch (recv[i-1]){ //for the center sensor there's a special case, the rock can be in front of the robot (1) and the rock can be in between the grabbber (2)
+        case 0:
+        centerDistance = 0; // The censor doesn't detect any rock
+        break;
+        case 1:
+        centerDistance = 1; // The sensor detects a rock in front of the robot
+        break;
+        case 2:
+        centerDistance = 2; // The sensor detects a rock in between the grabber
+        break;
+      }
     break;
     
-    case 2:   //receive right Sharp distance sensor -- distance in mm
-    rightDistance = atoi(&recv[1]);
+    case 3:   //receive right Sharp distance sensor -- distance in mm
+    if (recv[i-1] == '1'){ //check the last digit of the data received, 1 means boolean should be true and 0 means the boolean should be false
+      rightDistance = true; // True means that the sensor detects a rock in front of the robot
+    }
+    else if (recv[i-1] == '0'){ //Make sure to check if the digit is actually zero instead of a different random value in case of wrong communication
+      rightDistance = false; // False means that the sensor does not detect a rock
+    }
     break;
     
-    case 3:   //receive left CNY70 sensor 1 = high (no tape) - 0 = low (there's something, probably tape)
+    case 4:   //receive left CNY70 sensor 1 = high (no tape) - 0 = low (there's something, probably tape)
     if (recv[i-1] == '1'){ //check the last digit of the data received, 1 means boolean should be true and 0 means the boolean should be false
       leftCNY = true;
     }
@@ -58,7 +78,7 @@ void I2CRead(int numBytes) {
     }
     break;
     
-    case 4:   //receive center CNY70 sensor 1 = high (no tape) - 0 = low (there's something, probably tape)
+    case 5:   //receive center CNY70 sensor 1 = high (no tape) - 0 = low (there's something, probably tape)
     if (recv[i-1] == '1'){ //check the last digit of the data received, 1 means boolean should be true and 0 means the boolean should be false
       centerCNY = true;
     }
@@ -67,7 +87,7 @@ void I2CRead(int numBytes) {
     }
     break;
     
-    case 5:   //receive right CNY70 sensor 1 = high (no tape) - 0 = low (there's something, probably tape)
+    case 6:   //receive right CNY70 sensor 1 = high (no tape) - 0 = low (there's something, probably tape)
     if (recv[i-1] == '1'){ //check the last digit of the data received, 1 means boolean should be true and 0 means the boolean should be false
       rightCNY = true;
     }
@@ -76,20 +96,20 @@ void I2CRead(int numBytes) {
     }
     break;
     
-    case 6:   //receive left beacon sensor - which beacon(s) it detects
+    case 7:   //receive left beacon sensor - which beacon(s) it detects
     leftBeacon = atoi(&recv[i-3]); // grab the last two digits (i-3 because i is 1 larger than the array size) it received which is enough to represent up to 20 possibilities
     break;
     
-    case 7:   //receive center beacon sensor - which beacon(s) it detects
+    case 8:   //receive center beacon sensor - which beacon(s) it detects
     centerBeacon = atoi(&recv[i-3]); // grab the last two digits (i-3 because i is 1 larger than the array size) it received which is enough to represent up to 20 possibilities
     break;
     
-    case 8:   //receive right beacon sensor - which beacon(s) it detects
+    case 9:   //receive right beacon sensor - which beacon(s) it detects
     rightBeacon = atoi(&recv[i-3]); // grab the last two digits (i-3 because i is 1 larger than the array size) it received which is enough to represent up to 20 possibilities
     break;
     
-    case 9:   //unused
-      break;
+    case 0:   //unused
+    break;
   }
 }
 

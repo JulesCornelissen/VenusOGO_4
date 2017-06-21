@@ -1,1 +1,3 @@
-For sending data over from the master Arduino (Micro) to the slave Arduino (Uno) we use I2C communication. We wrote a function called sendData on the Micro which can take any string and send it over to the Uno via I2C.
+For sending data over from the master Arduino (Micro) to the slave Arduino (Uno) we use I2C communication. We wrote a function called sendData on the Micro which can take any string and send it over to the Uno via I2C. The encoding and specification for the communication can be found in the previous section in the receiving side documentation.
+
+On the Micro we receive all the data as defined in <insert documentation title here>. We convert the received data to fit within the encoding specification.

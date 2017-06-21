@@ -68,30 +68,65 @@ void sendData(char data[]){
 }
 
 void loop() {
+  char distance_left[];
+  char distance_center[];
+  char distance_right[];
+
+  char CNY_left[];
+  char CNY_center[];
+  char CNY_right[];
+  
   if (digitalRead(4) == LOW){
-    char CNY_left[] = "30";
+    CNY_left[] = "40"; //Tape detected by the left CNY70
     sendData(CNY_left); 
   }
   else if (digitalRead(4) == HIGH){
-    char CNY_left[] = "31";
+    char CNY_left[] = "41"; //No tape detected by the left CNY70
     sendData(CNY_left);
   }
   if (digitalRead(6) == LOW){
-    char CNY_center[] = "40";
+    char CNY_center[] = "50"; //Tape detected by the left CNY70
     sendData(CNY_center); 
   }
   else if (digitalRead(6) == HIGH){
-    char CNY_center[] = "41";
+    char CNY_center[] = "51"; //No tape detected by the left CNY70
     sendData(CNY_center);
   }  
   if (digitalRead(5) == LOW){
-    char CNY_right[] = "50";
+    char CNY_right[] = "60"; //Tape detected by the left CNY70
     sendData(CNY_right); 
   }
   else if (digitalRead(5) == HIGH){
-    char CNY_right[] = "51";
+    char CNY_right[] = "61"; //No tape detected by the left CNY70
     sendData(CNY_right);
   }
+
+  if (analogRead(19) > 100 ){ // Left distance
+    distance_left[] = "11"; // Rock is to the left of the robot
+  }
+  else{
+    distance_left[] = "10"; // There is no rock to the left of the robot
+  }
+
+  if (analogRead(19) > 100 && analogRead(19) < 450 ){ // Center distance
+    distance_right[] = "21"; // rock in front of the grabber
+  }
+  else{
+    if (analogRead(19) > 450){
+      distance_right[] = "22"; // rock is inbetween the grabber
+    }
+    else{
+    distance_right[] = "20"; // no rock detected
+    }
+  }
+  
+  if (analogRead(19) > 100 ){ // Right distance
+    distance_right[] = "31"; // Rock is to the right of the robot
+  }
+  else{
+    distance_right[] = "30"; // There is no rock to the right of the robot
+  }
+  
   //delay(500);
 }
 
